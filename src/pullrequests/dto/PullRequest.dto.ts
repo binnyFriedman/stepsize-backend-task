@@ -1,21 +1,14 @@
 import { Status } from '../../bitbucket';
-import { IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
+import { PullRequestPayload } from '../entities/PullRequestTrack.entity';
+
 
 export enum HostingProviders {
   GITHUB = 'github',
   GITBUCKET = 'gitbucket',
 }
 
-export class PullRequestPayload {
-  @IsNotEmpty()
-  repositoryName: string;
-  @IsNumber()
-  pullRequestNumber: number;
-  @IsEnum(HostingProviders)
-  codeHostingProvider: HostingProviders;
-}
 
-interface PullRequest {
+export interface PullRequest {
   id: number;
   repo: {
     name: string;
@@ -29,7 +22,7 @@ interface PullRequest {
 
 export interface PullRequestResponse {
   codeHostingProvider: HostingProviders;
-  payload: PullRequest & Record<string, any>;
+  payload: Record<string, any>;
 }
 
 export interface GetPullRequestsResponse {
@@ -37,8 +30,7 @@ export interface GetPullRequestsResponse {
 }
 
 export interface CodeHostingDriver {
-  trackPullRequest(payload: PullRequestPayload): Promise<boolean>;
   merge(payload: PullRequestPayload): Promise<boolean>;
-  getTrackedPullRequests(repoName: string): Promise<GetPullRequestsResponse>;
+  getPulRequestDetails(repo: string, id: number): Promise<PullRequest>;
   matchProviderCode(provider: string): boolean;
 }

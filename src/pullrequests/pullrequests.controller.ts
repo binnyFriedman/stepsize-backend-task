@@ -7,11 +7,9 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import {
-  GetPullRequestsResponse,
-  PullRequestPayload,
-} from './dto/PullRequest.dto';
+import { GetPullRequestsResponse } from './dto/PullRequest.dto';
 import { PullRequestsService } from './pullrequests.service';
+import { PullRequestPayload } from './entities/PullRequestTrack.entity';
 
 @Controller('pullrequest')
 export class PullrequestsController {
@@ -23,7 +21,7 @@ export class PullrequestsController {
 
   @Get()
   getTrackedPullRequests(
-    @Query('repositoryName') repoName: string,
+    @Query('repositoryName') repoName: string
   ): Promise<GetPullRequestsResponse> {
     if (!repoName) {
       throw new BadRequestException('Repository name is required');
@@ -32,7 +30,7 @@ export class PullrequestsController {
   }
 
   @Post('/:id/merge')
-  merge(@Param('id') id: string, @Body() payload: PullRequestPayload) {
-    return this.prService.merge(payload);
+  merge(@Param('id') id: number): Promise<boolean> {
+    return this.prService.merge(id);
   }
 }

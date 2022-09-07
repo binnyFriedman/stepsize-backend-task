@@ -68,8 +68,8 @@ describe('AppController (e2e)', () => {
     it('should track a pull request', async () => {
       const payload: PullRequestPayload = {
         codeHostingProvider: HostingProviders.GITHUB,
-        pullRequestNumber: 0,
-        repositoryName: 'test',
+        pullRequestNumber: 18,
+        repositoryName: 'cannabis-amplified',
       };
       await request(server).post(endpoint).send(payload).expect(201);
       //check if the pull request is tracked
@@ -84,7 +84,7 @@ describe('AppController (e2e)', () => {
     const endpoint = '/pullrequest';
     it('should return a list of pull requests for a given repository', async () => {
       const server = app.getHttpServer();
-      const req = await request(server).get(`${endpoint}?repositoryName=test`);
+      const req = await request(server).get(`${endpoint}?repositoryName=edi`);
       console.log(req.body);
       expect(req.status).toBe(200);
       expect(req.body).toBeDefined();
