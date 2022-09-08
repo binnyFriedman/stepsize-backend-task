@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import {
-  CodeHostingDriver,
+  ICodeHostingProvider,
   GetPullRequestsResponse,
   HostingProviders,
 } from './dto/PullRequest.dto';
@@ -15,7 +15,7 @@ import {
 export class PullRequestsService {
   constructor(
     @Inject('CodeHostingDrivers')
-    private readonly codeHostingDrivers: CodeHostingDriver[],
+    private readonly codeHostingDrivers: ICodeHostingProvider[],
     @InjectRepository(PullRequestPayload)
     private readonly pullRequestRepository: Repository<PullRequestPayload>
   ) {}
@@ -64,7 +64,9 @@ export class PullRequestsService {
     };
   }
 
-  private getCodeHostingDriver(provider: HostingProviders): CodeHostingDriver {
+  private getCodeHostingDriver(
+    provider: HostingProviders
+  ): ICodeHostingProvider {
     return this.codeHostingDrivers.find((driver) =>
       driver.matchProviderCode(provider)
     );

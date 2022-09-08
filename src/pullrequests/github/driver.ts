@@ -1,5 +1,5 @@
 import {
-  CodeHostingDriver,
+  ICodeHostingProvider,
   HostingProviders,
   PullRequest,
 } from '../dto/PullRequest.dto';
@@ -11,14 +11,14 @@ function getOctokit() {
   return new Octokit({ auth: process.env.GITHUB_TOKEN });
 }
 
-export class GitHubDriver implements CodeHostingDriver {
+export class GitHubDriver implements ICodeHostingProvider {
   private readonly hostingProvider: HostingProviders = HostingProviders.GITHUB;
   private readonly OWNER = process.env.GITHUB_OWNER;
 
   async merge(payload: PullRequestPayload): Promise<boolean> {
     const octokit = getOctokit();
-    const is_mergeable = await this.isPullRequestMergeable(payload);
-    if (!is_mergeable) throw new BadRequestException('The pr is not mergeable');
+    // const is_mergeable = await this.isPullRequestMergeable(payload);
+    // if (!is_mergeable) return false;
     const resp = await octokit.rest.pulls.merge({
       repo: payload.repositoryName,
       pull_number: payload.pullRequestNumber,

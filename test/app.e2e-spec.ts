@@ -38,14 +38,11 @@ describe('AppController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
     server = app.getHttpServer();
+    jest.setTimeout(20000);
   });
 
   it('should have server running', () => {
     expect(server).toBeDefined();
-  });
-
-  it('(GET) /', () => {
-    return request(server).get('/').expect(200).expect('Hello World!');
   });
 
   describe('(POST) /pullrequest', () => {
@@ -72,8 +69,8 @@ describe('AppController (e2e)', () => {
     it('should track a pull request', async () => {
       const payload: Omit<PullRequestPayload, 'id'> = {
         codeHostingProvider: HostingProviders.GITHUB,
-        pullRequestNumber: 1,
-        repositoryName: 'edi',
+        pullRequestNumber: parseInt(process.env.GITHUB_OPEN_PR_NUMBER || '1'),
+        repositoryName: process.env.GITHUB_OPEN_PR_REPO,
       };
       await request(server).post(endpoint).send(payload).expect(201);
       //check if the pull request is tracked
@@ -92,14 +89,15 @@ describe('AppController (e2e)', () => {
       repoName: string,
       hostingProvider: HostingProviders
     ) {
-      const payloads: CreatePullRequestPayloadDto[] = [];
+      const pr_numbers = process.env.GITHUB_REPO_PR_NUMBERS?.split(',');
       for (let i = 0; i < amount; i++) {
         const payload: CreatePullRequestPayloadDto = {
           codeHostingProvider: hostingProvider,
-          pullRequestNumber: [2, 3, 4, 5, 6, 7][Math.floor(Math.random() * 6)],
+          pullRequestNumber: parseInt(
+            pr_numbers[Math.floor(Math.random() * pr_numbers.length)]
+          ),
           repositoryName: repoName,
         };
-        payloads.push(payload);
         await request(server).post(endpoint).send(payload).expect(201);
       }
     }
@@ -107,7 +105,7 @@ describe('AppController (e2e)', () => {
       const providers = [
         {
           provider: HostingProviders.GITHUB,
-          repo: 'cannabis-nestjs',
+          repo: process.env.GITHUB_REPO_WITH_MANY_PRS,
         },
         { provider: HostingProviders.BITBUCKET, repo: 'test-repo' },
       ];
@@ -141,7 +139,6 @@ describe('AppController (e2e)', () => {
         pullRequestNumber: parseInt(process.env.GITHUB_OPEN_PR_NUMBER),
         repositoryName: process.env.GITHUB_OPEN_PR_REPO,
       };
-      console.log(mergeable_pr);
       const mergeable_pr_res = await request(server)
         .post('/pullrequest')
         .send(mergeable_pr)
@@ -166,7 +163,8 @@ describe('AppController (e2e)', () => {
       const unmanageable_pr_id = unmanageable_pr_res.body.id;
       await request(server)
         .post(`/pullrequest/${unmanageable_pr_id}/merge`)
-        .expect(400);
+        .expect(500)
+        .expect(false);
     });
   });
 });

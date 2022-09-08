@@ -1,10 +1,10 @@
 import { PullRequestIdentifier } from './types';
 import { mockPullRequestGenerator } from './mockPullRequestGenerator';
-import { CodeHostingDriver } from '../dto/PullRequest.dto';
+import { ICodeHostingProvider } from '../dto/PullRequest.dto';
 import { PullRequestPayload } from '../entities/PullRequestTrack.entity';
 import { PullRequest } from '../dto/PullRequest.dto';
 
-export class MockBitbucketClient implements CodeHostingDriver {
+export class MockBitbucketClient implements ICodeHostingProvider {
   private readonly providerCode = 'bitbucket';
   static async isPullRequestMergeable(
     identifier: PullRequestIdentifier

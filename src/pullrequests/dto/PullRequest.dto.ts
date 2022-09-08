@@ -28,7 +28,7 @@ export interface GetPullRequestsResponse {
   pullRequests: PullRequestResponse[];
 }
 
-export interface CodeHostingDriver {
+export interface ICodeHostingProvider {
   merge(payload: PullRequestPayload): Promise<boolean>;
   getPulRequestDetails(repo: string, id: number): Promise<PullRequest>;
   matchProviderCode(provider: string): boolean;
