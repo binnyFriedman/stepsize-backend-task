@@ -31,8 +31,8 @@ Once running, you can access the app at http://localhost:3000/api/
 Process and design decisions:
 
 I wanted the system to adapt to any new features easly and without breaking changes.
-Hence, I decided to use a plugin based architecture.
-To add a new code hosting provider (e.g. GitLab), you would need to create a folder inside the pullrequests folder and create a new class that implements the ICodeHostingProvider interface.
+Hence, I decided to use a plugin based architecture.<br>
+To add a new code hosting provider (e.g. GitLab), you would need to create a folder inside the pullrequests folder and create a new class that implements the ICodeHostingProvider interface, and add it to the list of providers in pullrequests.module.ts.<br>
 The NestJS framework is very flexible and scalable if you follow the right design patterns.
 That's why I decided to use it.
 
