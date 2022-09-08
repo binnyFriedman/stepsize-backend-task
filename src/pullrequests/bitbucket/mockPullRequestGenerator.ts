@@ -1,5 +1,5 @@
 import { PullRequest, PullRequestIdentifier, Statuses } from './types';
-import assert from 'assert';
+import { strict as assert } from 'assert';
 
 const randomPickOne = <T>(options: Array<T>): T => {
   const optionsCount = options.length;
@@ -8,11 +8,11 @@ const randomPickOne = <T>(options: Array<T>): T => {
 };
 
 export function mockPullRequestGenerator(
-  identifier: PullRequestIdentifier,
+  identifier: PullRequestIdentifier
 ): PullRequest {
   assert(
     typeof identifier.pullRequestId === 'number',
-    'PullRequestId needs to be a number',
+    'PullRequestId needs to be a number'
   );
 
   const titleOptions = [

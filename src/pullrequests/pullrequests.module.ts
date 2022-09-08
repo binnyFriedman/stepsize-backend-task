@@ -5,9 +5,10 @@ import { GitHubDriver } from './github/driver';
 import { CodeHostingDriver } from './dto/PullRequest.dto';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PullRequestPayload } from './entities/PullRequestTrack.entity';
+import { MockBitbucketClient } from './bitbucket';
 
 const codeHostingProvidersFactory: () => CodeHostingDriver[] = () => {
-  return [new GitHubDriver()];
+  return [new GitHubDriver(), new MockBitbucketClient()];
 };
 
 @Module({

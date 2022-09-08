@@ -6,7 +6,10 @@ import {
 } from './dto/PullRequest.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PullRequestPayload } from './entities/PullRequestTrack.entity';
+import {
+  CreatePullRequestPayloadDto,
+  PullRequestPayload,
+} from './entities/PullRequestTrack.entity';
 
 @Injectable()
 export class PullRequestsService {
@@ -17,9 +20,11 @@ export class PullRequestsService {
     private readonly pullRequestRepository: Repository<PullRequestPayload>
   ) {}
 
-  async trackPullRequest(payload: PullRequestPayload): Promise<boolean> {
-    const changes = await this.pullRequestRepository.save(payload);
-    return !!changes;
+  async trackPullRequest(
+    payload: CreatePullRequestPayloadDto
+  ): Promise<PullRequestPayload> {
+    const created = await this.pullRequestRepository.create(payload);
+    return await this.pullRequestRepository.save(created);
   }
 
   async merge(id: number): Promise<boolean> {

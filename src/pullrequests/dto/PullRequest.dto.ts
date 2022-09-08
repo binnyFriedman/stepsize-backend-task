@@ -1,16 +1,15 @@
-import { Status } from '../../bitbucket';
 import { PullRequestPayload } from '../entities/PullRequestTrack.entity';
-
 
 export enum HostingProviders {
   GITHUB = 'github',
-  GITBUCKET = 'gitbucket',
+  BITBUCKET = 'bitbucket',
 }
 
+export type Status = 'OPEN' | 'CLOSED' | 'MERGED';
 
 export interface PullRequest {
   id: number;
-  repo: {
+  repository: {
     name: string;
   };
   title: string;

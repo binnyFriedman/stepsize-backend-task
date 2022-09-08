@@ -9,13 +9,18 @@ import {
 } from '@nestjs/common';
 import { GetPullRequestsResponse } from './dto/PullRequest.dto';
 import { PullRequestsService } from './pullrequests.service';
-import { PullRequestPayload } from './entities/PullRequestTrack.entity';
+import {
+  CreatePullRequestPayloadDto,
+  PullRequestPayload,
+} from './entities/PullRequestTrack.entity';
 
 @Controller('pullrequest')
 export class PullrequestsController {
   constructor(private prService: PullRequestsService) {}
   @Post()
-  trackPullRequest(@Body() payload: PullRequestPayload): Promise<boolean> {
+  trackPullRequest(
+    @Body() payload: CreatePullRequestPayloadDto
+  ): Promise<PullRequestPayload> {
     return this.prService.trackPullRequest(payload);
   }
 
